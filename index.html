@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cyrus Data Hub</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: url("mtn-bg.jpg") no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+        text-align: center;
+      }
+      .overlay {
+        background: rgba(0, 0, 0, 0.7);
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .card {
+        background: white;
+        color: black;
+        padding: 20px;
+        margin: 10px auto;
+        border-radius: 12px;
+        max-width: 400px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      }
+      select, input, button {
+        padding: 10px;
+        margin: 8px;
+        width: 90%;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+      }
+      button {
+        background: #facc15;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #eab308;
+      }
+      img.preview {
+        margin-top: 10px;
+        max-width: 200px;
+        border-radius: 8px;
+      }
+      .footer {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- App Code -->
+    <script type="text/babel">
+      const { useState } = React;
+
+      function CyrusDataHub() {
+        const [network, setNetwork] = useState("MTN");
+        const [bundle, setBundle] = useState("");
+        const [phone, setPhone] = useState("");
+        const [screenshot, setScreenshot] = useState(null);
+
+        const mtnBundles = [
+          "1GB – ₵6","2GB – ₵11","3GB – ₵17","4GB – ₵22",
+          "5GB – ₵26","6GB – ₵31","7GB – ₵35","8GB – ₵45",
+          "9GB – ₵50","10GB – ₵50","15GB – ₵67","20GB – ₵86",
+          "25GB – ₵135","30GB – ₵145","40GB – ₵165"
+        ];
+
+        const telecelBundles = [
+          "5GB – ₵25","10GB – ₵50","15GB – ₵68",
+          "20GB – ₵85","30GB – ₵125","40GB – ₵147","50GB – ₵220"
+        ];
+
+        const handleWhatsApp = () => {
+          const msg = `Hello, I want to buy ${network} DATA\nBundle: ${bundle}\nBeneficiary: ${phone}\n(Note: please attach your payment screenshot)`;
+          window.open(
+            `https://wa.me/233502376541?text=${encodeURIComponent(msg)}`,
+            "_blank"
+          );
+        };
+
+        return (
+          <div className="overlay">
+            <h1>Cyrus Data Hub</h1>
+            <div className="card">
+              <h2>Select Network</h2>
+              <select onChange={(e) => setNetwork(e.target.value)}>
+                <option value="MTN">MTN</option>
+                <option value="Telecel">Telecel</option>
+              </select>
+
+              <h2>Select Bundle</h2>
+              <select onChange={(e) => setBundle(e.target.value)}>
+                <option value="">-- Choose Bundle --</option>
+                {(network === "MTN" ? mtnBundles : telecelBundles).map((b, i) => (
+                  <option key={i} value={b}>{b}</option>
+                ))}
+              </select>
+
+              <h2>Phone Number</h2>
+              <input
+                type="text"
+                placeholder="Enter beneficiary phone"
+                onChange={(e) => setPhone(e.target.value)}
+              />
+
+              <h2>Upload Payment Screenshot</h2>
+              <input type="file" accept="image/*" onChange={(e) => setScreenshot(URL.createObjectURL(e.target.files[0]))} />
+              {screenshot && <img src={screenshot} className="preview" />}
+
+              <button onClick={handleWhatsApp}>Buy Now</button>
+            </div>
+
+            <div className="footer">
+              <p>We work from Monday to Saturday (Closed on Sundays).</p>
+              <p>Closing time: 9PM daily.</p>
+              <p>Send money to <b>0502376541</b> (Vodafone). MTN users must choose other networks when sending.</p>
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<CyrusDataHub />);
+    </script>
+  </body>
+  </html>
