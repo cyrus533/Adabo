@@ -1,0 +1,182 @@
+// CyrusDataHub.jsx // React component with MTN & Telecel modals, bundle selection, phone input, screenshot upload, WhatsApp integration
+
+import { useState } from "react";
+
+export default function CyrusDataHub() { const [showMTN, setShowMTN] = useState(false); const [showTelecel, setShowTelecel] = useState(false); const [selectedBundle, setSelectedBundle] = useState(""); const [phone, setPhone] = useState(""); const [screenshot, setScreenshot] = useState(null); const [preview, setPreview] = useState(null);
+
+const mtnBundles = [ "1GB – ₵6", "2GB – ₵11", "3GB – ₵17", "4GB – ₵22", "5GB – ₵26", "6GB – ₵31", "7GB – ₵35", "8GB – ₵39", "9GB – ₵45", "10GB – ₵50", ];
+
+const telecelBundles = [ "5GB – ₵25", "10GB – ₵50", "15GB – ₵68", "20GB – ₵85", "30GB – ₵125", "40GB – ₵147", "50GB – ₵220", ];
+
+const handleFileUpload = (e) => { const file = e.target.files[0]; if (file) { setScreenshot(file); setPreview(URL.createObjectURL(file)); } };
+
+const handleWhatsApp = (network) => { const msg = Hello, I want to buy ${network} DATA%0ABundle: ${selectedBundle}%0ABeneficiary: ${phone}%0A(Note: please attach your payment screenshot); window.open(https://wa.me/233502376541?text=${msg}, "_blank"); };
+
+const Modal = ({ network, bundles, onClose }) => ( <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"> <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-6"> <h2 className="text-xl font-bold mb-4">{network} DATA</h2>
+
+{/* Bundle selection */}
+    <label className="block mb-2 text-sm font-medium">Select Bundle</label>
+    <select
+      className="w-full border rounded p-2 mb-4"
+      value={selectedBundle}
+      onChange={(e) => setSelectedBundle(e.target.value)}
+    >
+      <option value="">-- Choose a bundle --</option>
+      {bundles.map((b, i) => (
+        <option key={i} value={b}>{b}</option>
+      ))}
+    </select>
+
+    {/* Phone number */}
+    <label className="block mb-2 text-sm font-medium">Beneficiary Phone Number</label>
+    <input
+      type="tel"
+      className="w-full border rounded p-2 mb-4"
+      placeholder="e.g. 0501234567"
+      value={phone}
+      onChange={(e) => setPhone(e.target.value)}
+    />
+
+    {/* Screenshot upload */}
+    <label className="block mb-2 text-sm font-medium">Upload Payment Screenshot</label>
+    <input type="file" accept="image/*" onChange={handleFileUpload} className="mb-2" />
+    {preview && (
+      <img src={preview} alt="screenshot preview" className="w-32 h-32 object-cover rounded mb-4" />
+    )}
+
+    {/* Buttons */}
+    <div className="flex space-x-3 mb-4">
+      <button
+        className="flex-1 px-4 py-2 bg-yellow-400 text-gray-900 font-semibold rounded hover:bg-yellow-500"
+        onClick={() => alert("Order received! We'll contact you.")}
+      >
+        Buy Now
+      </button>
+      <button
+        className="flex-1 px-4 py-2 bg-green-500 text-white font-semibold rounded hover:bg-green-600"
+        onClick={() => handleWhatsApp(network)}
+      >
+        WhatsApp Order
+      </button>
+    </div>
+
+    {/* Important Note */}
+    <div className="text-sm text-gray-600 border-t pt-3">
+      <p>We work from <b>Monday to Saturday</b> (no Sundays).</p>
+      <p>Closing time: <b>9:00 PM</b>.</p>
+      <p>Send payments to: <b>0502376541 (Vodafone)</b>.</p>
+      <p>- Vodafone users: send directly.</p>
+      <p>- MTN users: select "Other Networks" when sending.</p>
+      <p className="mt-2 text-red-600 font-semibold">⚠ Please attach your payment screenshot in WhatsApp after ordering.</p>
+    </div>
+
+    <button
+      onClick={onClose}
+      className="mt-4 w-full px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+    >
+      Close
+    </button>
+  </div>
+</div>
+
+);
+
+return ( <div className="min-h-screen bg-white text-gray-900 antialiased"> {/* Top bar */} <header className="bg-gray-900 text-yellow-400"> <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8"> <div className="flex items-center justify-between h-16"> <div className="flex items-center space-x-3"> <div className="w-10 h-10 bg-yellow-400 rounded-md flex items-center justify-center font-bold text-gray-900">CD</div> <span className="hidden sm:inline-block font-semibold">CYRUS DATA HUB</span> </div> <nav className="hidden md:flex items-center space-x-6"> <button className="px-3 py-2 rounded hover:bg-yellow-500/20">Home</button> <button className="px-3 py-2 rounded hover:bg-yellow-500/20">Data Bundles</button> <button className="px-3 py-2 rounded hover:bg-yellow-500/20">Contact</button> </nav> </div> </div> </header>
+
+{/* Hero */}
+  <main>
+    <section className="relative">
+      <div className="h-72 sm:h-96 md:h-[520px] lg:h-[560px] bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1520975911517-7d97b1f0d9b7?auto=format&fit=crop&w=1400&q=60')" }}>
+        <div className="absolute inset-0 bg-black/35"></div>
+        <div className="absolute inset-0 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+          <div className="text-white">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight max-w-3xl">
+              Buy/Resell Cheap
+              <br />
+              Data Bundles Online
+            </h1>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Data Bundles section */}
+    <section className="py-12 bg-white">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold">Data Bundles</h2>
+          <p className="text-gray-600 mt-2">Select Network To Buy</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+          {/* Card: Telecel */}
+          <div className="rounded-xl overflow-hidden shadow-lg border hover:shadow-2xl transition">
+            <div className="h-40 flex items-center justify-center" style={{ background: '#e11d48' }}>
+              <div className="text-white text-4xl font-extrabold">t</div>
+            </div>
+            <div className="p-4 bg-slate-50">
+              <h3 className="font-semibold text-lg">Telecel</h3>
+              <p className="text-sm text-gray-600 mt-1">Buy Telecel data bundles instantly.</p>
+              <div className="mt-4">
+                <button
+                  className="px-4 py-2 rounded bg-yellow-400 text-gray-900 font-semibold"
+                  onClick={() => setShowTelecel(true)}
+                >
+                  Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Card: MTN */}
+          <div className="rounded-xl overflow-hidden shadow-lg border hover:shadow-2xl transition">
+            <div className="h-40 flex items-center justify-center" style={{ background: '#ffd400' }}>
+              <div className="text-black text-2xl font-extrabold px-4 py-2 border rounded-full">MTN</div>
+            </div>
+            <div className="p-4 bg-slate-50">
+              <h3 className="font-semibold text-lg">MTN DATA</h3>
+              <p className="text-sm text-gray-600 mt-1">Affordable MTN bundles — reseller-friendly.</p>
+              <div className="mt-4">
+                <button
+                  className="px-4 py-2 rounded bg-yellow-400 text-gray-900 font-semibold"
+                  onClick={() => setShowMTN(true)}
+                >
+                  Buy Now
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Card: Placeholder for other network */}
+          <div className="rounded-xl overflow-hidden shadow-lg border hover:shadow-2xl transition">
+            <div className="h-40 flex items-center justify-center" style={{ background: '#06b6d4' }}>
+              <div className="text-white text-3xl font-extrabold">Other</div>
+            </div>
+            <div className="p-4 bg-slate-50">
+              <h3 className="font-semibold text-lg">Other Network</h3>
+              <p className="text-sm text-gray-600 mt-1">Add more networks as needed.</p>
+              <div className="mt-4">
+                <button className="px-4 py-2 rounded bg-yellow-400 text-gray-900 font-semibold">Buy Now</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    {/* Footer */}
+    <footer className="bg-gray-50 py-6">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-500">
+        © {new Date().getFullYear()} Cyrus Data Hub — Buy cheap data bundles online
+      </div>
+    </footer>
+  </main>
+
+  {showMTN && <Modal network="MTN" bundles={mtnBundles} onClose={() => setShowMTN(false)} />}
+  {showTelecel && <Modal network="Telecel" bundles={telecelBundles} onClose={() => setShowTelecel(false)} />}
+</div>
+
+); }
+
